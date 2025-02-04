@@ -1,0 +1,109 @@
+/* Modal Overlay: Covers the entire screen */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure modal is above other content */
+}
+
+/* Modal Content: The actual modal box */
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 800px; /* Adjust the width of the modal */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+/* Styles for the NavBar component inside the modal */
+.modal-content .navbar {
+  margin-bottom: 20px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Modal Footer (Buttons) */
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.form-row {
+  margin: 10px 5px;
+  display: flex;
+  align-items: center; /* Align items vertically */
+  margin-bottom: 1rem; /* Add spacing between rows */
+}
+
+.form-row label {
+  flex: 0 0 150px; /* Fixed width for labels */
+  margin-right: 1rem; /* Space between label and input */
+  text-align: right; /* Align label text to the right */
+}
+
+.form-row input {
+  flex: 1; /* Input takes up the remaining space */
+}
+
+/* Form Control: Styling for the input and buttons */
+.form-control {
+  width: 400px; /* Adjust width of the input field */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box; /* Ensure padding does not affect width */
+}
+
+/* Button Styles */
+button {
+  padding: 10px 15px;
+  background-color: #4CAF50; /* Green background */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Specific styles for the "Cancel" button */
+button[type="button"] {
+  background-color: #f44336; /* Red background for cancel */
+}
+
+button[type="button"]:hover {
+  background-color: #e53935; /* Darker red on hover */
+}
+
+/* Styling for the form labels and text */
+label {
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 10px; /* Space between the label and input */
+  width: 120px; /* You can adjust this width based on your needs */
+}
+
+/* HR styling */
+hr {
+  margin-top: 20px;
+  border: 0;
+  border-top: 1px solid #ccc;
+}
