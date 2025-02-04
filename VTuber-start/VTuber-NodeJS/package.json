@@ -1,0 +1,22 @@
+{
+  "name": "vtuber-nodejs",
+  "version": "1.0.0",
+  "description": "NodeJS backend",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon ./server.js"
+  },
+  "author": "Perkins",
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "express": "^4.21.1",
+    "uuid": "^11.0.3"
+  }
+}
