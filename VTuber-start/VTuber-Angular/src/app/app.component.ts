@@ -1,23 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { VtuberHeaderComponent } from './header/vtuber-header.component';
-import { HttpService } from './services/http.service';
+import { VTuberListComponent } from './vtuber/vtuber-list/vtuber-list.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, VtuberHeaderComponent],
+  imports: [RouterOutlet, VtuberHeaderComponent, VTuberListComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'VTuber Database';
-
-  constructor(private httpService: HttpService) {}
-
-  ngOnInit(): void {
-    this.httpService.getVTubers().subscribe((data) => {
-      console.log(data); // Should log VTuber data from Node.js backend
-    });
-  }
 
 }

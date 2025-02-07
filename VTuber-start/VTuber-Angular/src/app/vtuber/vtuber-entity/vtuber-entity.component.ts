@@ -1,12 +1,12 @@
-// src/app/vtuber-entity/vtuber-entity.component.ts
 import { Component, Input } from '@angular/core';
-import { VTuber } from '../../models/vtuber';  // Import the VTuber model
+import { VTuber } from '../../models/vtuber'; // Make sure this import path is correct
 
 @Component({
-  selector: 'app-vtuber-entity',
+  selector: 'vtuber-entity',
+  standalone: true,
   templateUrl: './vtuber-entity.component.html',
   styleUrls: ['./vtuber-entity.component.scss']
 })
 export class VtuberEntityComponent {
-  @Input() vtuber: VTuber | undefined;  // Use Input to pass vtuber data from parent
+  @Input() vtuberEntity!: VTuber;  // Ensure this is the correct property name and type
 }
