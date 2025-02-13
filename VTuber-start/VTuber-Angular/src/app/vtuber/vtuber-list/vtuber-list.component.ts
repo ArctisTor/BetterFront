@@ -4,6 +4,7 @@ import { VTuber } from '../../models/vtuber';
 import { CommonModule } from '@angular/common'; // Import CommonModule
 
 import { VtuberEntityComponent } from '../vtuber-entity/vtuber-entity.component'; // Import your other component
+import { VtuberService } from '../../services/vtuber.service';
 
 @Component({
   selector: 'vtuber-list',
@@ -16,16 +17,13 @@ export class VTuberListComponent implements OnInit {
   completeVtuberList: VTuber[] = [];
   filterVtubers: VTuber[] = [];
 
-  constructor(private httpService: HttpService) {}
+  constructor(private vtuberService: VtuberService) {}
 
   ngOnInit(): void {
-    this.httpService.getVTubers().subscribe({
-      next: (data) => {
-        this.completeVtuberList = data.Vtubers
-        this.filterVtubers = data.Vtubers
-      },
-      error: (err) => {
-        console.error('Error fetching VTuber data:', err);
+    this.vtuberService.completeVtuberList.subscribe({
+      next: (vtubers) => {
+        this.completeVtuberList = vtubers;
+        this.filterVtubers = vtubers;
       }
     });
   }
