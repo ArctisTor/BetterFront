@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HttpService } from '../../services/http.service';
 import { VTuber } from '../../models/vtuber';
 import { CommonModule } from '@angular/common'; // Import CommonModule
 
 import { VtuberEntityComponent } from '../vtuber-entity/vtuber-entity.component'; // Import your other component
 import { VtuberService } from '../../services/vtuber.service';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'vtuber-list',
@@ -14,17 +15,13 @@ import { VtuberService } from '../../services/vtuber.service';
   styleUrls: ['./vtuber-list.component.scss']
 })
 export class VTuberListComponent implements OnInit {
-  completeVtuberList: VTuber[] = [];
-  filterVtubers: VTuber[] = [];
+  completeVtuberList!: Observable<VTuber[]>;
+  filterVtubers!: Observable<VTuber[]>;
 
   constructor(private vtuberService: VtuberService) {}
 
   ngOnInit(): void {
-    this.vtuberService.completeVtuberList.subscribe({
-      next: (vtubers) => {
-        this.completeVtuberList = vtubers;
-        this.filterVtubers = vtubers;
-      }
-    });
+    this.completeVtuberList = this.vtuberService.completeVtuberList;
+    this.filterVtubers = this.vtuberService.completeVtuberList;
   }
 }
