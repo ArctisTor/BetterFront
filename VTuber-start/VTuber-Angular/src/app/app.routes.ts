@@ -1,8 +1,16 @@
-import { Routes } from '@angular/router';
+import { Routes } from '@angular/router'
 
 export const routes: Routes = [
-    { 
-        path : 'organization', 
-        loadComponent: () => import('./organizations/organization/organization.component').then(m => m.OrganizationComponent)
-    }
-];
+    {
+        path: '',
+        loadComponent: () =>
+            import('./vtuber/vtuber-list/vtuber-list.component').then((m) => m.VTuberListComponent),
+    },
+    {
+        path: 'organization',
+        loadComponent: () =>
+            import('./organizations/organization/organization.component').then(
+                (m) => m.OrganizationComponent,
+            ),
+    },
+]
