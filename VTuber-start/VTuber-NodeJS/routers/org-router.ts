@@ -1,16 +1,15 @@
 import { Router } from "express";
 import axios from "axios";
+import { AppConfig } from "../config/AppConfig.js";
 
-const orgRouter = (config: { [x: string]: any }) => {
+const orgRouter = (config: AppConfig) => {
   const router = Router();
-  const javaServerInfo = config["java-server"];
-  const javaServerURL = `${javaServerInfo.protocol}://${javaServerInfo.url}:${javaServerInfo.port}`;
 
   router.get("/", async (request, response) => {
     let status = 200;
     try {
       const orgGetCall = await axios.get(
-        javaServerURL + javaServerInfo.orgController.getAll
+        config.getJavaServerInstanceURL()+ config.getOrgGetAllPath()
       );
       if (orgGetCall.data) {
         return response.status(status).json(orgGetCall.data);
@@ -31,7 +30,7 @@ const orgRouter = (config: { [x: string]: any }) => {
     }
     return response.status(status).json({
       message: "Failed to fetch organization data",
-      javaServerURL,
+      javaServerURL : config.getJavaServerInstanceURL(),
     });
   });
 

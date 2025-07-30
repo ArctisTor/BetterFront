@@ -5,18 +5,21 @@ import fs from "fs";
 import cors from "cors";
 import vtuberRouter from "./routers/vtuber-router.js";
 import orgRouter from "./routers/org-router.js";
+import { AppConfig } from "./config/AppConfig.js";
 
 // Get current path because of type module
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const __configPath = path.join(__dirname, "./config", "appconfig.json");
 
-let config;
+let config: AppConfig;
 try {
-  const configPath = path.join(__dirname, "./config", "appconfig.json");
-  config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+  const rawData = fs.readFileSync(__configPath, "utf-8");
+  const jsonData = JSON.parse(rawData);
+  config = new AppConfig(jsonData);
 } catch (error: unknown) {
   if (error instanceof Error) {
-  console.error("Failed to load appconfig.json:", error.message);
+    console.error("Failed to load appconfig.json:", error.message);
   } else {
     console.error("Error in GET /vtuber:", error);
   }

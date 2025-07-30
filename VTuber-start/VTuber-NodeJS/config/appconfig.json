@@ -1,17 +1,21 @@
 {
-  "server" : {
-    "protocol" : "http",
-    "port" : "5000"
+  "server": {
+    "protocol": "http",
+    "port": "5000"
   },
-  "java-server" : {
-    "protocol" : "http",
-    "url" : "localhost",
-    "port" : "8080",
-    "vtuberController" : {
-      "getAll" : "/Vtuber"
+  "java-server": {
+    "instances" : [
+      {
+        "protocol": "http",
+        "url": "localhost",
+        "port": "9000"
+      }
+    ],
+    "vtuberController": {
+      "getAll": "/Vtuber"
     },
-    "orgController" : {
-      "getAll" : "/Organization"
+    "orgController": {
+      "getAll": "/Organization"
     }
   }
 }
