@@ -1,5 +1,6 @@
 interface ServerConfig {
   protocol: string;
+  url: string;
   port: number | string; 
 }
 
@@ -21,35 +22,33 @@ interface JavaServerConfig {
 
 interface AppConfigData {
   server: ServerConfig;
-  "java-server": JavaServerConfig;
+  javaServer: JavaServerConfig;
 }
-
-// Now the class
 
 export class AppConfig implements AppConfigData {
   server: ServerConfig;
-  "java-server": JavaServerConfig;
+  javaServer: JavaServerConfig;
 
   constructor(data: AppConfigData) {
     this.server = data.server;
-    this["java-server"] = data["java-server"];
+    this.javaServer = data.javaServer;
   }
 
   // Optional: Add methods to access specific parts or helper methods
   getServerURL(): string {
-    return `${this.server.protocol}://localhost:${this.server.port}`;
+    return `${this.server.protocol}://${this.server.url}:${this.server.port}`;
   }
 
   getJavaServerInstanceURL(index = 0): string {
-    const instance = this["java-server"].instances[index];
+    const instance = this.javaServer.instances[index];
     return `${instance.protocol}://${instance.url}:${instance.port}`;
   }
 
   getVtuberGetAllPath(): string {
-    return this["java-server"].vtuberController.getAll;
+    return this.javaServer.vtuberController.getAll;
   }
 
   getOrgGetAllPath(): string {
-    return this["java-server"].orgController.getAll;
+    return this.javaServer.orgController.getAll;
   }
 }

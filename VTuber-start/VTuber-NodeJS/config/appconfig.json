@@ -1,6 +1,7 @@
 {
   "server": {
     "protocol": "http",
+    "url" : "localhost",
     "port": "5000"
   },
   "java-server": {
