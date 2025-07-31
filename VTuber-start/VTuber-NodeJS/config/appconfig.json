@@ -1,15 +1,20 @@
 {
   "server": {
     "protocol": "http",
-    "url" : "localhost",
+    "url": "localhost",
     "port": "5000"
   },
-  "java-server": {
-    "instances" : [
+  "javaServer": {
+    "instances": [
       {
         "protocol": "http",
         "url": "localhost",
         "port": "9000"
+      },
+      {
+        "protocol": "http",
+        "url": "localhost",
+        "port": "8080"
       }
     ],
     "vtuberController": {
@@ -17,6 +22,9 @@
     },
     "orgController": {
       "getAll": "/Organization"
+    },
+    "heartbeatController": {
+      "heartBeat" : "/HeartBeat"
     }
   }
 }

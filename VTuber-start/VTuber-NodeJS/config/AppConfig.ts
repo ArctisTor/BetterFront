@@ -1,23 +1,33 @@
 interface ServerConfig {
   protocol: string;
   url: string;
-  port: number | string; 
+  port: number | string;
 }
 
-interface JavaServerInstance {
+export interface JavaServerInstance {
   protocol: string;
   url: string;
   port: number | string;
 }
 
-interface ControllerPaths {
+// Define separate interfaces for each controller
+interface VtuberControllerPaths {
   getAll: string;
+}
+
+interface OrgControllerPaths {
+  getAll: string;
+}
+
+interface HeartbeatControllerPaths {
+  heartBeat: string;
 }
 
 interface JavaServerConfig {
   instances: JavaServerInstance[];
-  vtuberController: ControllerPaths;
-  orgController: ControllerPaths;
+  vtuberController: VtuberControllerPaths;
+  orgController: OrgControllerPaths;
+  heartbeatController: HeartbeatControllerPaths;
 }
 
 interface AppConfigData {
@@ -28,13 +38,14 @@ interface AppConfigData {
 export class AppConfig implements AppConfigData {
   server: ServerConfig;
   javaServer: JavaServerConfig;
+  healthyJavaServers: JavaServerInstance[] = [];
+  unhealthyJavaServers: JavaServerInstance[] = [];
 
   constructor(data: AppConfigData) {
     this.server = data.server;
     this.javaServer = data.javaServer;
   }
 
-  // Optional: Add methods to access specific parts or helper methods
   getServerURL(): string {
     return `${this.server.protocol}://${this.server.url}:${this.server.port}`;
   }
@@ -50,5 +61,9 @@ export class AppConfig implements AppConfigData {
 
   getOrgGetAllPath(): string {
     return this.javaServer.orgController.getAll;
+  }
+
+  getHeartBeatPath(): string {
+    return this.javaServer.heartbeatController.heartBeat;
   }
 }
