@@ -4,11 +4,22 @@ interface ServerConfig {
   port: number | string;
 }
 
-export interface JavaServerInstance {
+export class JavaServerInstance {
   protocol: string;
   url: string;
   port: number | string;
+
+  constructor(protocol: string, url: string, port: number | string) {
+    this.protocol = protocol;
+    this.url = url;
+    this.port = port;
+  }
+
+  toString(): string {
+    return `${this.protocol}://${this.url}:${this.port}`;
+  }
 }
+
 
 // Define separate interfaces for each controller
 interface VtuberControllerPaths {
@@ -40,6 +51,7 @@ export class AppConfig implements AppConfigData {
   javaServer: JavaServerConfig;
   healthyJavaServers: JavaServerInstance[] = [];
   unhealthyJavaServers: JavaServerInstance[] = [];
+  preferredJavaServer: JavaServerInstance | null = null;
 
   constructor(data: AppConfigData) {
     this.server = data.server;
@@ -50,8 +62,17 @@ export class AppConfig implements AppConfigData {
     return `${this.server.protocol}://${this.server.url}:${this.server.port}`;
   }
 
-  getJavaServerInstanceURL(index = 0): string {
-    const instance = this.javaServer.instances[index];
+  getJavaServerInstanceURL(index = 0): string | null {
+    const instance =
+      this.preferredJavaServer ??
+      (index !== undefined
+        ? this.healthyJavaServers[index]
+        : this.healthyJavaServers[
+            Math.floor(Math.random() * this.healthyJavaServers.length)
+          ]);
+    if (!instance) {
+      return null;
+    }
     return `${instance.protocol}://${instance.url}:${instance.port}`;
   }
 

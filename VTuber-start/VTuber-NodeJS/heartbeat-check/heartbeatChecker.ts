@@ -52,11 +52,11 @@ export class HeartBeatChecker {
       }
       if (error instanceof Error) {
         console.error(
-          `Heartbeat check failed for ${instance.url}:`,
+          `Heartbeat check failed for ${instance.toString}:`,
           error.message
         );
       } else {
-        console.error(`Heartbeat check failed for ${instance.url}:`, error);
+        console.error(`Heartbeat check failed for ${instance.toString()}:`, error);
       }
     }
   }
@@ -66,4 +66,11 @@ export class HeartBeatChecker {
       await this.checkJavaInstanceHealth(instance, appconfig);
     }
   }
+
+  public async checkHealthyServers(appconfig: AppConfig): Promise<void> {
+        for (const instance of appconfig.healthyJavaServers) {
+      await this.checkJavaInstanceHealth(instance, appconfig);
+    }
+  }
+  
 }

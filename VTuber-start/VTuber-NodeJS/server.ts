@@ -5,7 +5,7 @@ import fs from 'fs';
 import cors from 'cors';
 import vtuberRouter from './routers/vtuber-router.js';
 import orgRouter from './routers/org-router.js';
-import { AppConfig } from './config/AppConfig.js';
+import { AppConfig, JavaServerInstance } from './config/AppConfig.js';
 import { HeartBeatChecker } from './heartbeat-check/heartbeatChecker.js';
 
 // Get current path because of type module
@@ -28,17 +28,77 @@ try {
 }
 
 const PORT = config.server.port || 5001;
+
+// Create app and mount routers
 const app = express();
+app.use(express.json());
+app.use(cors());
+
+// Mount points for vtuber and org routers
+const vtuberMount = express.Router();
+const orgMount = express.Router();
+
+app.use('/vtuber', vtuberMount);
+app.use('/org', orgMount);
 
 // Run heartbeat checks
 const checker = new HeartBeatChecker();
 await checker.checkJavaInstances(config);
+refreshRouters(config); // Mount only healthy server routes
 
-app.use(express.json());
-app.use(cors());
-app.use('/vtuber', vtuberRouter(config));
-app.use('/org', orgRouter(config));
+setInterval(async () => {
+  await checker.checkJavaInstances(config);
+  refreshRouters(config);
+}, 10_000); // every 30s
 
 app.listen(PORT, () => {
   console.log(`Server is running on PORT: ${PORT}`);
 });
+
+function refreshRouters(config: AppConfig) {
+  // 1) Select preferred server if none or if current one unhealthy
+  const preferred = config.preferredJavaServer;
+  const stillHealthy =
+    preferred &&
+    config.healthyJavaServers.some(
+      (server) =>
+        server.protocol === preferred.protocol &&
+        server.url === preferred.url &&
+        server.port === preferred.port
+    );
+
+  if (!preferred || !stillHealthy) {
+    if (config.healthyJavaServers.length > 0) {
+      const randomIndex = Math.floor(
+        Math.random() * config.healthyJavaServers.length
+      );
+      const selected = config.healthyJavaServers[randomIndex];
+      // Wrap plain object in JavaServerInstance
+      config.preferredJavaServer = new JavaServerInstance(
+        selected.protocol,
+        selected.url,
+        selected.port
+      );
+      console.log(
+        'Preferred server selected/updated:',
+        config.preferredJavaServer?.toString()
+      );
+    } else {
+      config.preferredJavaServer = null;
+      console.warn('No healthy servers available to select preferred server.');
+    }
+  } else {
+    // Preferred server still healthy, no action needed
+    console.log(
+      `Preferred server is still healthy: ${config.preferredJavaServer?.toString()}`
+    );
+  }
+
+  // 2) Clear old routes
+  vtuberMount.stack = [];
+  orgMount.stack = [];
+
+  // 3) Add new routes
+  vtuberMount.use(vtuberRouter(config));
+  orgMount.use(orgRouter(config));
+}
