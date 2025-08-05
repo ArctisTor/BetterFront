@@ -1,7 +1,17 @@
-interface ServerConfig {
+export class ServerConfig {
   protocol: string;
   url: string;
   port: number | string;
+
+  constructor(protocol: string, url: string, port: number | string) {
+    this.protocol = protocol;
+    this.url = url;
+    this.port = port;
+  }
+
+  toString(): string {
+    return `${this.protocol}://${this.url}:${this.port}`;
+  }
 }
 
 export class JavaServerInstance {
@@ -34,28 +44,54 @@ interface HeartbeatControllerPaths {
   heartBeat: string;
 }
 
-interface JavaServerConfig {
-  instances: JavaServerInstance[];
-  vtuberController: VtuberControllerPaths;
-  orgController: OrgControllerPaths;
-  heartbeatController: HeartbeatControllerPaths;
+export class JavaServerConfig {
+  public instances: JavaServerInstance[];
+  public vtuberController: VtuberControllerPaths;
+  public orgController: OrgControllerPaths;
+  public heartbeatController: HeartbeatControllerPaths;
+
+  constructor(
+    instances: JavaServerInstance[],
+    vtuberController: VtuberControllerPaths,
+    orgController: OrgControllerPaths,
+    heartbeatController: HeartbeatControllerPaths
+  ) {
+    this.instances = instances;
+    this.vtuberController = vtuberController;
+    this.orgController = orgController;
+    this.heartbeatController = heartbeatController;
+  }
 }
 
-interface AppConfigData {
-  server: ServerConfig;
-  javaServer: JavaServerConfig;
+export class AppConfigData {
+  constructor(
+    public server: ServerConfig,
+    public javaServer: JavaServerConfig
+  ) {}
 }
 
 export class AppConfig implements AppConfigData {
-  server: ServerConfig;
-  javaServer: JavaServerConfig;
-  healthyJavaServers: JavaServerInstance[] = [];
-  unhealthyJavaServers: JavaServerInstance[] = [];
-  preferredJavaServer: JavaServerInstance | null = null;
+  public server: ServerConfig;
+  public javaServer: JavaServerConfig;
+  public healthyJavaServers: JavaServerInstance[] = [];
+  public unhealthyJavaServers: JavaServerInstance[] = [];
+  public preferredJavaServer: JavaServerInstance | null = null;
 
   constructor(data: AppConfigData) {
-    this.server = data.server;
-    this.javaServer = data.javaServer;
+    this.server = new ServerConfig(
+      data.server.protocol,
+      data.server.url,
+      data.server.port
+    );
+
+    this.javaServer = new JavaServerConfig(
+      data.javaServer.instances.map(
+        (i) => new JavaServerInstance(i.protocol, i.url, i.port)
+      ),
+      data.javaServer.vtuberController,
+      data.javaServer.orgController,
+      data.javaServer.heartbeatController
+    );
   }
 
   getServerURL(): string {
