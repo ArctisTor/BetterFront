@@ -7,6 +7,7 @@ import vtuberRouter from './routers/vtuber-router.js';
 import orgRouter from './routers/org-router.js';
 import { AppConfig, JavaServerInstance } from './config/AppConfig.js';
 import { HeartBeatChecker } from './heartbeat-check/heartbeatChecker.js';
+import { logger } from './log/logger.js';
 
 // Get current path because of type module
 const __filename = url.fileURLToPath(import.meta.url);
@@ -49,9 +50,10 @@ refreshRouters(config); // Mount only healthy server routes
 setInterval(async () => {
   await checker.checkJavaInstances(config);
   refreshRouters(config);
-}, 10_000); // every 30s
+}, 60_000); // every 60s
 
 app.listen(PORT, () => {
+  logger.logInfo(`Server is running on PORT: ${PORT}`)
   console.log(`Server is running on PORT: ${PORT}`);
 });
 

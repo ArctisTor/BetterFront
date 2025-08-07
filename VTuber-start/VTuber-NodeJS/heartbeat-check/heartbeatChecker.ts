@@ -1,6 +1,8 @@
 import { AppConfig, JavaServerInstance } from '../config/AppConfig.js';
 import axios from 'axios';
 
+import { logger } from '../log/logger.js';
+
 export class HeartBeatChecker {
   public async checkJavaInstances(appconfig: AppConfig): Promise<void> {
     for (const instance of appconfig.javaServer.instances) {
@@ -52,7 +54,7 @@ export class HeartBeatChecker {
       }
       if (error instanceof Error) {
         console.error(
-          `Heartbeat check failed for ${instance.toString}:`,
+          `Heartbeat check failed for ${instance.toString()}`,
           error.message
         );
       } else {
