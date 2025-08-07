@@ -5,7 +5,7 @@ import path from 'path';
 import pkg from '../package.json' with { type: 'json' };
 const { name, version } = pkg;
 
-const logDir = path.resolve('logs');
+const logDir = path.resolve('NodeJS-logs');
 if (!fs.existsSync(logDir)) {
   fs.mkdirSync(logDir);
 }
