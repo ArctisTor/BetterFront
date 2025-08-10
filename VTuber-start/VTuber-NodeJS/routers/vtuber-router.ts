@@ -2,6 +2,8 @@ import { Router } from 'express';
 import axios from 'axios';
 import { AppConfig } from '../config/AppConfig.js';
 
+import {logger} from '../log/logger.js'
+
 const vtuberRouter = (config: AppConfig) => {
   const router = Router();
 
@@ -17,9 +19,9 @@ const vtuberRouter = (config: AppConfig) => {
     } catch (error: unknown) {
       status = 500;
       if (error instanceof Error) {
-        console.error('Error in GET /vtuber:', error.message);
+        logger.logError(`Error in GET /vtuber: ${error.message}`);
       } else {
-        console.error('Error in GET /vtuber:', error);
+        logger.logError(`Error in GET /vtuber: ${error}`)
       }
     }
     return response.status(status).json({

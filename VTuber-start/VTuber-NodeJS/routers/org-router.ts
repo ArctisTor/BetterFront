@@ -2,6 +2,8 @@ import { Router } from "express";
 import axios from "axios";
 import { AppConfig } from "../config/AppConfig.js";
 
+import {logger} from '../log/logger.js'
+
 const orgRouter = (config: AppConfig) => {
   const router = Router();
 
@@ -19,13 +21,12 @@ const orgRouter = (config: AppConfig) => {
       if (error instanceof Error) {
         // For axios errors, 'response' is on error but not on Error type, so cast carefully
         const axiosError = error as { response?: { data?: any } };
-        console.error(
-          "Error in GET /organization:",
-          error.message,
-          axiosError.response?.data || ""
-        );
+        logger.logError(`Error in GET /organization: ${error.message} `)
+        if (axiosError.response?.data) {
+          logger.logError(`${axiosError.response?.data}`)
+        }
       } else {
-        console.error("Error in GET /organization:", error);
+        logger.logError(`Error in GET /organization: ${error} `)
       }
     }
     return response.status(status).json({

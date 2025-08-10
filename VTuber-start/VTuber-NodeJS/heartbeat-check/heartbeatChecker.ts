@@ -53,12 +53,9 @@ export class HeartBeatChecker {
         appconfig.unhealthyJavaServers.push(instance);
       }
       if (error instanceof Error) {
-        console.error(
-          `Heartbeat check failed for ${instance.toString()}`,
-          error.message
-        );
+        logger.logError(`Heartbeat check failed for ${instance.toString()}: ${error.message}`)
       } else {
-        console.error(`Heartbeat check failed for ${instance.toString()}:`, error);
+        logger.logError(`Heartbeat check failed for ${instance.toString()}: ${error}`)
       }
     }
   }

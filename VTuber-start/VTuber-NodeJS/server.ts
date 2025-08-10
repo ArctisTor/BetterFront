@@ -21,9 +21,9 @@ try {
   config = new AppConfig(jsonData);
 } catch (error: unknown) {
   if (error instanceof Error) {
-    console.error('Failed to load appconfig.json:', error.message);
+    logger.logError(`Failed to load appconfig.json: ${ error.message}`)
   } else {
-    console.error('Error in GET /vtuber:', error);
+    logger.logError(`Error in GET /vtuber: ${error}`)
   }
   process.exit(1); // Exit process if configuration is invalid
 }
@@ -53,8 +53,7 @@ setInterval(async () => {
 }, 60_000); // every 60s
 
 app.listen(PORT, () => {
-  logger.logInfo(`Server is running on PORT: ${PORT}`)
-  console.log(`Server is running on PORT: ${PORT}`);
+  logger.logInfo(`Server is running on PORT: ${PORT}`);
 });
 
 function refreshRouters(config: AppConfig) {
@@ -81,17 +80,18 @@ function refreshRouters(config: AppConfig) {
         selected.url,
         selected.port
       );
-      console.log(
-        'Preferred server selected/updated:',
-        config.preferredJavaServer?.toString()
+      logger.logInfo(
+        `Preferred server selected/updated: ${config.preferredJavaServer?.toString()}`
       );
     } else {
       config.preferredJavaServer = null;
-      console.warn('No healthy servers available to select preferred server.');
+      logger.logError(
+        'No healthy servers available to select preferred server.'
+      );
     }
   } else {
     // Preferred server still healthy, no action needed
-    console.log(
+    logger.logInfo(
       `Preferred server is still healthy: ${config.preferredJavaServer?.toString()}`
     );
   }
