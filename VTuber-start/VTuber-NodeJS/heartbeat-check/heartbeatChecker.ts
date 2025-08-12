@@ -1,5 +1,5 @@
 import { AppConfig, JavaServerInstance } from '../config/AppConfig.js';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 import { logger } from '../log/logger.js';
 
@@ -44,7 +44,7 @@ export class HeartBeatChecker {
           appconfig.unhealthyJavaServers.push(instance);
         }
       }
-    } catch (error: unknown) {
+    } catch (error) {
       // On error, treat as unhealthy
       appconfig.healthyJavaServers = appconfig.healthyJavaServers.filter(
         (i) => i !== instance
@@ -52,10 +52,20 @@ export class HeartBeatChecker {
       if (!appconfig.unhealthyJavaServers.includes(instance)) {
         appconfig.unhealthyJavaServers.push(instance);
       }
-      if (error instanceof Error) {
-        logger.logError(`Heartbeat check failed for ${instance.toString()}: ${error.message}`)
+      if (axios.isAxiosError(error)) {
+        (error as AxiosError & { errors?: any[] }).errors?.forEach((err) => {
+          logger.logError(
+            `Heartbeat check failed for ${instance.toString()} : ${err.message}`
+          );
+        });
+      } else if (error instanceof Error) {
+        logger.logError(
+          `Heartbeat check failed for ${instance.toString()}: ${error.message}`
+        );
       } else {
-        logger.logError(`Heartbeat check failed for ${instance.toString()}: ${error}`)
+        logger.logError(
+          `Heartbeat check failed for ${instance.toString()}: ${String(error)}`
+        );
       }
     }
   }
@@ -67,9 +77,8 @@ export class HeartBeatChecker {
   }
 
   public async checkHealthyServers(appconfig: AppConfig): Promise<void> {
-        for (const instance of appconfig.healthyJavaServers) {
+    for (const instance of appconfig.healthyJavaServers) {
       await this.checkJavaInstanceHealth(instance, appconfig);
     }
   }
-  
 }
