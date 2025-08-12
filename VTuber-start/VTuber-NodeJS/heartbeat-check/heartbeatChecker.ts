@@ -53,7 +53,8 @@ export class HeartBeatChecker {
         appconfig.unhealthyJavaServers.push(instance);
       }
       if (axios.isAxiosError(error)) {
-        (error as AxiosError & { errors?: any[] }).errors?.forEach((err) => {
+        const axiosError = error as AxiosError & { errors?: any[] };
+        axiosError.errors?.forEach((err) => {
           logger.logError(
             `Heartbeat check failed for ${instance.toString()} : ${err.message}`
           );
