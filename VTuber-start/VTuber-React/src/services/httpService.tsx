@@ -1,38 +1,35 @@
-import { VTuber } from "../models/VTuber";
+import { BehaviorSubject, Observable } from 'rxjs';
+import { VTuber } from '../models/VTuber';
 
 class HttpService {
-  private vtubers: VTuber[] = [];
-  private vtuberSubscribers: ((vtubers: VTuber[]) => void)[] = [];
+  // Holds the current list and emits updates
+  private vtubersSubject = new BehaviorSubject<VTuber[]>([]);
+  // Observable to expose to consumers
+  public vtubers = this.vtubersSubject.asObservable();
 
-  subscribeOnVTubers(callback: (vtubers: VTuber[]) => void) {
-    this.vtuberSubscribers.push(callback);
+  // Return an Observable instead of a Promise
+  getAllVTubers(): Observable<VTuber[]> {
+    return new Observable<VTuber[]>((subscriber) => {
+      fetch('/vtuber')
+        .then((response) => response.json())
+        .then((data) => {
+          const vtubers = data.Vtubers as VTuber[];
+          this.vtubersSubject.next(vtubers); // update internal state
+          subscriber.next(vtubers); // emit to subscriber
+          subscriber.complete(); // complete Observable
+        })
+        .catch((error) => {
+          console.error('Error fetching VTubers:', error);
+          subscriber.error(error); // emit error
+        });
+    });
   }
 
-  unsubscribeOnVTubers(callback: (vtubers: VTuber[]) => void) {
-    this.vtuberSubscribers = this.vtuberSubscribers.filter(
-      (cb) => cb !== callback
-    );
-  }
-
-  // Notify all subscribers of a change
-  private notifyVtuberSubscribers(): void {
-    this.vtuberSubscribers.forEach((callback) => callback(this.vtubers));
-  }
-
-  async getAllVTubers(): Promise<void> {
-    try {
-      let response = await fetch("/vtuber");
-      const data = await response.json();
-      this.vtubers = data.Vtubers as VTuber[];
-      this.notifyVtuberSubscribers();
-    } catch (error) {
-      console.error("Error fetching VTubers:", error);
-    }
-  }
-
-  getVTubers(): VTuber[] {
-    return this.vtubers;
+  // Optional helper to get the current value
+  getVTubersSnapshot(): VTuber[] {
+    return this.vtubersSubject.getValue();
   }
 }
 
-export default HttpService;
+const httpService = new HttpService();
+export default httpService; //export a Singleton pattern

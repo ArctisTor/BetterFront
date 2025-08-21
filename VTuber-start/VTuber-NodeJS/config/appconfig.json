@@ -4,6 +4,9 @@
     "url": "localhost",
     "port": "5000"
   },
+  "heartBeatSettings": {
+    "refreshInMinutes": 5
+  },
   "javaServer": {
     "instances": [
       {
@@ -24,7 +27,7 @@
       "getAll": "/Organization"
     },
     "heartbeatController": {
-      "heartBeat" : "/HeartBeat"
+      "heartBeat": "/HeartBeat"
     }
   }
 }

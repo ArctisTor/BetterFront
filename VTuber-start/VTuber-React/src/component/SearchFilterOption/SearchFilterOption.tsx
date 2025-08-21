@@ -1,12 +1,12 @@
-import { FilterOption } from "../../models/FilterOption";
-import { useState, useEffect } from "react";
-import { filterService } from "../../services/filterService";
-import "./SearchFilterOption.css";
+import { FilterOption } from '../../models/FilterOption';
+import { useState, useEffect } from 'react';
+import { filterService } from '../../services/filterService';
+import './SearchFilterOption.css';
 
-import { useDispatch } from "react-redux";
-import { decrement } from "../../slices/filterSlice";
-import { useSelector } from "react-redux";
-import { RootState } from "../../services/store";
+import { useDispatch } from 'react-redux';
+import { decrement } from '../../slices/filterSlice';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../services/store';
 
 const SearchFilterOption = () => {
   const [filters, setFilters] = useState<FilterOption[]>([]);
@@ -21,15 +21,13 @@ const SearchFilterOption = () => {
 
   // Sync the internal selectedOption state with selectedCategory prop
   useEffect(() => {
-    // Update function to sync state with the service
-    const updateFilters = (newFilters: FilterOption[]) => {
-      setFilters(newFilters); // Get latest filters from the service
-    };
+    // Subscribe to the filters$ Observable
+    const subscription = filterService.filters.subscribe((newFilters) => {
+      setFilters(newFilters);
+    });
 
-    filterService.subscribe(updateFilters);
-
-    // Cleanup on unmount
-    return () => filterService.unsubscribe(updateFilters);
+    // Cleanup subscription on unmount
+    return () => subscription.unsubscribe();
   }, []);
 
   return (

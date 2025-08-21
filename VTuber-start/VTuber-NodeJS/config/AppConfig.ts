@@ -30,7 +30,6 @@ export class JavaServerInstance {
   }
 }
 
-
 // Define separate interfaces for each controller
 interface VtuberControllerPaths {
   getAll: string;
@@ -63,16 +62,26 @@ export class JavaServerConfig {
   }
 }
 
+export class HeartBeatSettings {
+  public refreshInMinutes: number;
+
+  constructor(refreshInMinutes: number) {
+    this.refreshInMinutes = refreshInMinutes;
+  }
+}
+
 export class AppConfigData {
   constructor(
     public server: ServerConfig,
-    public javaServer: JavaServerConfig
+    public javaServer: JavaServerConfig,
+    public heartBeatSettings: HeartBeatSettings
   ) {}
 }
 
 export class AppConfig implements AppConfigData {
   public server: ServerConfig;
   public javaServer: JavaServerConfig;
+  public heartBeatSettings: HeartBeatSettings;
   public healthyJavaServers: JavaServerInstance[] = [];
   public unhealthyJavaServers: JavaServerInstance[] = [];
   public preferredJavaServer: JavaServerInstance | null = null;
@@ -91,6 +100,10 @@ export class AppConfig implements AppConfigData {
       data.javaServer.vtuberController,
       data.javaServer.orgController,
       data.javaServer.heartbeatController
+    );
+
+    this.heartBeatSettings = new HeartBeatSettings(
+      data.heartBeatSettings.refreshInMinutes
     );
   }
 

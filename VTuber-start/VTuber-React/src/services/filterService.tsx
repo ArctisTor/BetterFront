@@ -1,40 +1,33 @@
-import { FilterOption } from "../models/FilterOption";
+import { BehaviorSubject } from 'rxjs';
+import { FilterOption } from '../models/FilterOption';
 
 class FilterService {
-  private filters: FilterOption[] = []; // Private state of filters
-  private subscribers: ((filters: FilterOption[]) => void)[] = []; // Array of subscriber callbacks
+  // BehaviorSubject holds current filters and emits updates
+  private filtersSubject = new BehaviorSubject<FilterOption[]>([]);
 
+  // Observable for components to subscribe to
+  public filters = this.filtersSubject.asObservable();
 
-  // Subscribe method: components register for updates
-  subscribe(callback: (filters: FilterOption[]) => void): void {
-    this.subscribers.push(callback);
-  }
-
-  // Unsubscribe method: remove a component's callback
-  unsubscribe(callback: (filters: FilterOption[]) => void): void {
-    this.subscribers = this.subscribers.filter((cb) => cb !== callback);
-  }
-
-  // Notify all subscribers of a change
-  private notify(): void {
-    this.subscribers.forEach((callback) => callback(this.filters));
-  }
-
-  // Add a filter and notify subscribers
+  // Add a filter
   addFilter(newFilter: FilterOption): void {
-    this.filters = [... this.filters, newFilter]
-    this.notify(); // Notify subscribers
+    const current = this.filtersSubject.getValue();
+    this.filtersSubject.next([...current, newFilter]);
   }
 
-  // Remove a filter and notify subscribers
+  // Remove a filter by index
   removeFilter(index: number): void {
-    this.filters = this.filters.filter((_vtuber, i) => i !== index); // Remove filter at index
-    this.notify(); // Notify subscribers
+    const current = this.filtersSubject.getValue();
+    this.filtersSubject.next(current.filter((_f, i) => i !== index));
   }
 
-  // Get current filters
+  // Get the current filters snapshot
   getFilters(): FilterOption[] {
-    return this.filters;
+    return this.filtersSubject.getValue();
+  }
+
+  // Optionally, set all filters at once
+  setFilters(filters: FilterOption[]): void {
+    this.filtersSubject.next(filters);
   }
 }
 

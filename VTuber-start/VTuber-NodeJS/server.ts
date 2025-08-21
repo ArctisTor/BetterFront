@@ -29,6 +29,7 @@ try {
 }
 
 const PORT = config.server.port || 5001;
+const heartBeatCheckInMinutes = config.heartBeatSettings.refreshInMinutes;
 
 // Create app and mount routers
 const app = express();
@@ -50,7 +51,7 @@ refreshRouters(config); // Mount only healthy server routes
 setInterval(async () => {
   await checker.checkJavaInstances(config);
   refreshRouters(config);
-}, 60_000); // every 60s
+}, heartBeatCheckInMinutes* 60_000); // every 60s
 
 app.listen(PORT, () => {
   logger.logInfo(`Server is running on PORT: ${PORT}`);

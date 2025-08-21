@@ -1,16 +1,14 @@
-import { useState, useEffect } from "react";
-import { VTuber } from "../models/VTuber";
-import VTuberEntity from "./VTuberEntity";
-import SearchBar from "../component/SearchBar/SearchBar";
-import SearchFilterOption from "../component/SearchFilterOption/SearchFilterOption";
-import { FilterOption } from "../models/FilterOption";
-import { filterService } from "../services/filterService";
-import HttpService from "../services/httpService";
+import { useState, useEffect } from 'react';
+import { VTuber } from '../models/VTuber';
+import VTuberEntity from './VTuberEntity';
+import SearchBar from '../component/SearchBar/SearchBar';
+import SearchFilterOption from '../component/SearchFilterOption/SearchFilterOption';
+import { FilterOption } from '../models/FilterOption';
+import { filterService } from '../services/filterService';
+import httpService from '../services/httpService'; // singleton instance
 
-import "./VTuberList.css";
-import DebutVTuber from "../component/modal/debutVTuberModal/DebutVTuber";
-
-const httpService = new HttpService();
+import './VTuberList.css';
+import DebutVTuber from '../component/modal/debutVTuberModal/DebutVTuber';
 
 const VTuberList = () => {
   const [allVtubers, setAllVtubers] = useState<VTuber[]>([]);
@@ -22,55 +20,59 @@ const VTuberList = () => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-
+  // Filter helper
   const vtuberList = (filterOptions: FilterOption[]): VTuber[] => {
     if (filterOptions.length > 0) {
-      return allVtubers.filter((vtuber) => {
-        return filterOptions.some((filter) => {
+      return allVtubers.filter((vtuber) =>
+        filterOptions.some((filter) => {
           const value = vtuber[filter.category as keyof VTuber];
-          if (typeof value === "string") {
-            return value.includes(filter.query);
-          } else if (typeof value === "number") {
-            return value == Number(filter.query);
-          }
+          if (typeof value === 'string') return value.includes(filter.query);
+          if (typeof value === 'number') return value === Number(filter.query);
           return false;
-        });
-      });
+        })
+      );
     }
-    return allVtubers; // If no filters, return all VTubers
+    return allVtubers;
   };
 
+  // Apply filters whenever vtubers or filters change
   useEffect(() => {
-    if (allVtubers.length > 0) {
-      setFilterVtubers(vtuberList(filters)); // Apply filters to allVtubers
-    }
-  }, [allVtubers, filters]); // Dependency array ensures the effect runs when either `allVtubers` or `filters` change
+    setFilterVtubers(vtuberList(filters));
+  }, [allVtubers, filters]);
 
   useEffect(() => {
-    const handleVtuberUpdate = (newVtubers: VTuber[]) => {
-      setDropdownOptions(Object.keys(newVtubers[0]));
-      setAllVtubers(newVtubers); // Update the state with the latest vtubers
+    // Subscribe to VTubers Observable
+    const vtuberSubscription = httpService.vtubers.subscribe((newVtubers) => {
+      if (newVtubers.length > 0) {
+        setDropdownOptions(Object.keys(newVtubers[0]));
+        setAllVtubers(newVtubers);
+      }
+    });
+
+    // Subscribe to filterService
+    const filterSubscription = filterService.filters.subscribe(
+      (newFilterOptions: FilterOption[]) => {
+        setFilters(newFilterOptions);
+      }
+    );
+
+    // Trigger fetch
+    httpService.getAllVTubers().subscribe();
+
+    // Cleanup subscriptions on unmount
+    return () => {
+      vtuberSubscription.unsubscribe();
+      filterSubscription.unsubscribe();
     };
-
-    const handleFilterOptionUpdate = (newFilterOptions: FilterOption[]) => {
-      setFilters(newFilterOptions); //async function
-      setFilterVtubers(vtuberList(newFilterOptions));
-    };
-
-    httpService.subscribeOnVTubers(handleVtuberUpdate);
-    filterService.subscribe(handleFilterOptionUpdate);
-
-    httpService.getAllVTubers();
-
-    // Cleanup on unmount
-    return () => httpService.unsubscribeOnVTubers(handleVtuberUpdate);
   }, []);
 
   return (
     <>
       <div className="option-bar">
-        <button className="debut-button" onClick={openModal}>+ Debut</button>
-        <DebutVTuber isOpen={isModalOpen} closeModal={closeModal}/>
+        <button className="debut-button" onClick={openModal}>
+          + Debut
+        </button>
+        <DebutVTuber isOpen={isModalOpen} closeModal={closeModal} />
         <SearchBar dropdownOption={dropdownOptions} />
       </div>
       <SearchFilterOption />
