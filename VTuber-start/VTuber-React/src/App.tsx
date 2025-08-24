@@ -3,11 +3,12 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   RouterProvider,
-} from "react-router-dom";
+} from 'react-router-dom';
 
-import "./App.css";
-import VTuberList from "./pages/VTuberList";
-import NavBar from "./component/NavBar";
+import './App.css';
+import VTuberList from './pages/VTuber/VTuberList';
+import NavBar from './component/NavBar';
+import TabBar from './component/TabBar/TabBar';
 
 function App() {
   const router = createBrowserRouter(
@@ -20,7 +21,8 @@ function App() {
 
   return (
     <>
-      <NavBar/>
+      <TabBar />
+      <NavBar />
       <RouterProvider router={router} />
     </>
   );

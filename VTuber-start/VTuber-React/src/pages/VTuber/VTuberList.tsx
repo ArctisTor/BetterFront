@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
-import { VTuber } from '../models/VTuber';
+import { VTuber } from '../../models/VTuber';
 import VTuberEntity from './VTuberEntity';
-import SearchBar from '../component/SearchBar/SearchBar';
-import SearchFilterOption from '../component/SearchFilterOption/SearchFilterOption';
-import { FilterOption } from '../models/FilterOption';
-import { filterService } from '../services/filterService';
-import httpService from '../services/httpService'; // singleton instance
+import SearchBar from '../../component/SearchBar/SearchBar';
+import SearchFilterOption from '../../component/SearchFilterOption/SearchFilterOption';
+import { FilterOption } from '../../models/FilterOption';
+import { filterService } from '../../services/filterService';
+import httpService from '../../services/httpService'; // singleton instance
 
 import './VTuberList.css';
-import DebutVTuber from '../component/modal/debutVTuberModal/DebutVTuber';
+import DebutVTuber from '../../component/modal/debutVTuberModal/DebutVTuber';
 
 const VTuberList = () => {
   const [allVtubers, setAllVtubers] = useState<VTuber[]>([]);
@@ -36,18 +36,22 @@ const VTuberList = () => {
   };
 
   // Apply filters whenever vtubers or filters change
+  //This one’s job is purely derived state: whenever the raw VTuber list or filters change, recompute the filtered list.
   useEffect(() => {
     setFilterVtubers(vtuberList(filters));
   }, [allVtubers, filters]);
 
+  //This one is about side effects with external systems (subscribing to Observables, cleaning them up).
   useEffect(() => {
     // Subscribe to VTubers Observable
-    const vtuberSubscription = httpService.vtubers.subscribe((newVtubers) => {
-      if (newVtubers.length > 0) {
-        setDropdownOptions(Object.keys(newVtubers[0]));
-        setAllVtubers(newVtubers);
-      }
-    });
+    const vtuberSubscription = httpService
+      .getAllVTubers()
+      .subscribe((newVTubers) => {
+        if (newVTubers.length > 0) {
+          setDropdownOptions(Object.keys(newVTubers[0]));
+          setAllVtubers(newVTubers);
+        }
+      });
 
     // Subscribe to filterService
     const filterSubscription = filterService.filters.subscribe(
@@ -55,9 +59,6 @@ const VTuberList = () => {
         setFilters(newFilterOptions);
       }
     );
-
-    // Trigger fetch
-    httpService.getAllVTubers().subscribe();
 
     // Cleanup subscriptions on unmount
     return () => {

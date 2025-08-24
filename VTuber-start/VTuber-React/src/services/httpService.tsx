@@ -4,8 +4,6 @@ import { VTuber } from '../models/VTuber';
 class HttpService {
   // Holds the current list and emits updates
   private vtubersSubject = new BehaviorSubject<VTuber[]>([]);
-  // Observable to expose to consumers
-  public vtubers = this.vtubersSubject.asObservable();
 
   // Return an Observable instead of a Promise
   getAllVTubers(): Observable<VTuber[]> {
@@ -26,7 +24,7 @@ class HttpService {
   }
 
   // Optional helper to get the current value
-  getVTubersSnapshot(): VTuber[] {
+  getVTubersSubject(): VTuber[] {
     return this.vtubersSubject.getValue();
   }
 }
