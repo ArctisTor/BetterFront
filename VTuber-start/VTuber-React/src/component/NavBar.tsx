@@ -1,10 +1,11 @@
+import React from 'react';
+
 interface NavBarTitle {
   title?: string;
 }
 
-const NavBar: React.FC<NavBarTitle> = ({title}) => {
-
-  const defaultTitle = "VTuber Database";
+const NavBar: React.FC<NavBarTitle> = ({ title }) => {
+  const defaultTitle = 'VTuber Database';
   const displayTitle = title || defaultTitle;
 
   return (

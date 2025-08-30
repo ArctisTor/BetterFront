@@ -3,29 +3,36 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   RouterProvider,
+  Outlet,
 } from 'react-router-dom';
 
 import './App.css';
 import VTuberList from './pages/VTuber/VTuberList';
-import NavBar from './component/NavBar';
 import TabBar from './component/TabBar/TabBar';
 
-function App() {
-  const router = createBrowserRouter(
-    createRoutesFromElements(
-      <Route path="/">
-        <Route index element={<VTuberList />} />
-      </Route>
-    )
-  );
-
+// Root layout: TabBar + Outlet for route content
+function Layout() {
   return (
     <>
       <TabBar />
-      <NavBar />
-      <RouterProvider router={router} />
+      <Outlet /> {/* renders the current route */}
     </>
   );
+}
+
+// Create the router
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<Layout />}>
+      <Route index element={<VTuberList />} /> {/* default route */}
+      <Route path="vtubers" element={<VTuberList />} />
+      {/* <Route path="organizations" element={<OrganizationList />} /> */}
+    </Route>
+  )
+);
+
+function App() {
+  return <RouterProvider router={router} />;
 }
 
 export default App;
