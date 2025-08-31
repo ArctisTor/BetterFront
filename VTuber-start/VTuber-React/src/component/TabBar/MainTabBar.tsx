@@ -7,9 +7,9 @@ import {
   ThemeProvider,
   createTheme,
 } from '@mui/material';
-import NavBar from '../NavBar';
 import './TabsStyle.css';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Route, useLocation, useNavigate } from 'react-router-dom';
+import DatabaseTabBar from './DatabaseTabBar/DatabaseTabBar';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -32,20 +32,20 @@ function TabPanel({ children, value, index }: TabPanelProps) {
 // Optional: still use theme for other global overrides
 const theme = createTheme({});
 
-const TabBar: React.FC = () => {
-  const [value] = React.useState(0);
-  const location = useLocation();
-  const navigate = useNavigate();
+const MainTabBar: React.FC = () => {
+  const [value, setValue] = React.useState(0);
+  // const location = useLocation();
+  // const navigate = useNavigate();
 
   // Map tab indices to routes
-  const routes = ['/', '/organizations'];
+  // const routes = ['/', '/organizations'];
 
   // Determine current tab based on location
-  const currentTab = routes.indexOf(location.pathname);
+  //const currentTab = routes.indexOf(location.pathname);
+  const currentTab = value >= 0 && value ? value : 0;
 
   const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
-    // Navigate to the route corresponding to the tab
-    navigate(routes[newValue]);
+    setValue(newValue);
   };
 
   return (
@@ -58,20 +58,18 @@ const TabBar: React.FC = () => {
             variant="standard"
             textColor="inherit"
           >
-            <Tab label="VTubers" className="custom-tab" />
-            <Tab label="Organizations" className="custom-tab" />
+            <Tab label="Database" className="custom-tab" />
+            <Tab label="????" className="custom-tab" />
           </Tabs>
         </Box>
 
         <TabPanel value={value} index={0}>
-          <NavBar title="VTuber Database" />
+          <DatabaseTabBar></DatabaseTabBar>
         </TabPanel>
-        <TabPanel value={value} index={1}>
-          <NavBar title="Organization Database" />
-        </TabPanel>
+        <TabPanel value={value} index={1}></TabPanel>
       </Box>
     </ThemeProvider>
   );
 };
 
-export default TabBar;
+export default MainTabBar;

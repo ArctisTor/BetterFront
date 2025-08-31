@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
-import { VTuber } from '../../models/VTuber';
+import { VTuber } from '../../../models/VTuber';
 import VTuberEntity from './VTuberEntity';
-import SearchBar from '../../component/SearchBar/SearchBar';
-import SearchFilterOption from '../../component/SearchFilterOption/SearchFilterOption';
-import { FilterOption } from '../../models/FilterOption';
-import { filterService } from '../../services/filterService';
-import httpService from '../../services/httpService'; // singleton instance
+import SearchBar from '../../../component/SearchBar/SearchBar';
+import SearchFilterOption from '../../../component/SearchFilterOption/SearchFilterOption';
+import { FilterOption } from '../../../models/FilterOption';
+import { filterService } from '../../../services/filterService';
+import httpService from '../../../services/httpService'; // singleton instance
 
-import './VTuberList.css';
-import DebutVTuber from '../../component/modal/debutVTuberModal/DebutVTuber';
+import '../DatabaseList.css';
+import DebutVTuber from '../../../component/modal/debutVTuberModal/DebutVTuber';
 
 const VTuberList = () => {
   const [allVtubers, setAllVtubers] = useState<VTuber[]>([]);

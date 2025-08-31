@@ -7,14 +7,13 @@ import {
 } from 'react-router-dom';
 
 import './App.css';
-import VTuberList from './pages/VTuber/VTuberList';
-import TabBar from './component/TabBar/TabBar';
+import MainTabBar from './component/TabBar/MainTabBar';
 
 // Root layout: TabBar + Outlet for route content
 function Layout() {
   return (
     <>
-      <TabBar />
+      <MainTabBar />
       <Outlet /> {/* renders the current route */}
     </>
   );
@@ -24,8 +23,8 @@ function Layout() {
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
-      <Route index element={<VTuberList />} /> {/* default route */}
-      <Route path="vtubers" element={<VTuberList />} />
+      {/* <Route index element={<VTuberList />} /> {/* default route */}
+      {/* <Route path="vtubers" element={<VTuberList />} /> */}
       {/* <Route path="organizations" element={<OrganizationList />} /> */}
     </Route>
   )
