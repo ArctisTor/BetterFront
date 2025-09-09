@@ -10,6 +10,7 @@ import {
 import './TabsStyle.css';
 import { Route, useLocation, useNavigate } from 'react-router-dom';
 import DatabaseTabBar from './DatabaseTabBar/DatabaseTabBar';
+import DatabaseConfiguration from '../../pages/Configuration/Database/DatabaseConfiguration';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -37,7 +38,7 @@ const MainTabBar: React.FC = () => {
   // const location = useLocation();
   // const navigate = useNavigate();
 
-  // Map tab indices to routes
+  //Map tab indices to routes
   // const routes = ['/', '/organizations'];
 
   // Determine current tab based on location
@@ -59,14 +60,16 @@ const MainTabBar: React.FC = () => {
             textColor="inherit"
           >
             <Tab label="Database" className="custom-tab" />
-            <Tab label="????" className="custom-tab" />
+            <Tab label="Database Configuration" className="custom-tab" />
           </Tabs>
         </Box>
 
         <TabPanel value={value} index={0}>
           <DatabaseTabBar></DatabaseTabBar>
         </TabPanel>
-        <TabPanel value={value} index={1}></TabPanel>
+        <TabPanel value={value} index={1}>
+          <DatabaseConfiguration></DatabaseConfiguration>
+        </TabPanel>
       </Box>
     </ThemeProvider>
   );

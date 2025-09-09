@@ -9,6 +9,7 @@
   border-radius: 8px;
   margin: 0 4px;
   border: 1px solid black !important;
+  width: 150px !important;
 }
 
 .custom-tab.Mui-selected {
