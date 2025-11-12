@@ -21,13 +21,13 @@
       }
     ],
     "vtuberController": {
-      "getAll": "/Vtuber"
+      "getAll": "/api/v1/vtuber"
     },
     "orgController": {
-      "getAll": "/Organization"
+      "getAll": "/api/v1/organization"
     },
     "heartbeatController": {
-      "heartBeat": "/HeartBeat"
+      "heartBeat": "/api/v1/heartbeat"
     }
   }
 }
