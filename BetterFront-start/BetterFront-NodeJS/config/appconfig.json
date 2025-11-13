@@ -1,0 +1,36 @@
+{
+  "server": {
+    "protocol": "http",
+    "url": "localhost",
+    "port": "5000"
+  },
+  "heartBeatSettings": {
+    "refreshInMinutes": 5
+  },
+  "javaServer": {
+    "instances": [
+      {
+        "protocol": "http",
+        "url": "localhost",
+        "port": "9000"
+      },
+      {
+        "protocol": "http",
+        "url": "localhost",
+        "port": "8080"
+      }
+    ],
+    "vtuberController": {
+      "getAll": "/api/v1/vtuber"
+    },
+    "orgController": {
+      "getAll": "/api/v1/organization"
+    },
+    "meadRecipeController": {
+      "getAll": "/api/v1/meads"
+    },
+    "heartbeatController": {
+      "heartBeat": "/api/v1/heartbeat"
+    }
+  }
+}

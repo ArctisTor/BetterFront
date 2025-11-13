@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.option-bar {
+  display: flex; /* Enable flexbox layout */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  gap: 1rem; /* Add space between items if needed */
+  padding: 1rem; /* Optional padding for spacing */
+  background-color: #f3f4f6; /* Optional background color */
+  border-bottom: 1px solid #d1d5db; /* Optional bottom border */
+}
