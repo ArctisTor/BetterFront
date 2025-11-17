@@ -1,71 +1,69 @@
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, from, Observable } from 'rxjs';
 import { VTuber } from '../models/VTuber';
 import { Organization } from '../models/Organization';
 import { MeadRecipe } from '../models/mead_models/MeadRecipe';
+import AppConfig from '../config/AppConfig';
 
 class HttpService {
-  // Holds the current list and emits updates
   private vtubersSubject = new BehaviorSubject<VTuber[]>([]);
   private orgSubject = new BehaviorSubject<Organization[]>([]);
   private meadSubject = new BehaviorSubject<MeadRecipe[]>([]);
 
-  // Return an Observable instead of a Promise
+
+  // --- VTUBERS ----------------------------------------------------
+
   getAllVTubers(): Observable<VTuber[]> {
-    return new Observable<VTuber[]>((subscriber) => {
-      fetch('/vtuber')
-        .then((response) => response.json())
+    return from(
+      fetch(AppConfig.api.vtuber.getAll)
+        .then((res) => res.json())
         .then((data) => {
-          const vtubers = data.Vtubers as VTuber[];
-          this.vtubersSubject.next(vtubers); // update internal state
-          subscriber.next(vtubers); // emit to subscriber
-          subscriber.complete(); // complete Observable
+          const list = data.Vtubers as VTuber[];
+          this.vtubersSubject.next(list);
+          return list;
         })
-        .catch((error) => {
-          console.error('Error fetching VTubers:', error);
-          subscriber.error(error); // emit error
-        });
-    });
+    );
   }
 
-  // Optional helper to get the current value
-  getVTubersSubject(): VTuber[] {
+  getCurrentVTubers(): VTuber[] {
     return this.vtubersSubject.getValue();
   }
 
+  // --- ORGANIZATIONS ----------------------------------------------
+
   getAllOrganizations(): Observable<Organization[]> {
-    return new Observable<Organization[]>((subscriber) => {
-      fetch('/org')
-        .then((response) => response.json())
+    return from(
+      fetch(AppConfig.api.organization.getAll)
+        .then((res) => res.json())
         .then((data) => {
-          const orgs = data.Organizations as Organization[];
-          this.orgSubject.next(orgs); // update internal state
-          subscriber.next(orgs); // emit to subscriber
-          subscriber.complete(); // complete Observable
+          const list = data.Organizations as Organization[];
+          this.orgSubject.next(list);
+          return list;
         })
-        .catch((error) => {
-          console.error('Error fetching Organizations:', error);
-          subscriber.error(error); // emit error
-        });
-    });
+    );
   }
 
+  getCurrentOrganizations(): Organization[] {
+    return this.orgSubject.getValue();
+  }
+
+  // --- MEAD RECIPES -----------------------------------------------
+
   getAllMeadRecipes(): Observable<MeadRecipe[]> {
-    return new Observable<MeadRecipe[]>((subscriber) => {
-      fetch('/meadRecipes')
-        .then((response) => response.json())
+    return from(
+      fetch(AppConfig.api.meadRecipe.getAll)
+        .then((res) => res.json())
         .then((data) => {
-          console.log('HELLOO!');
-          const meadRecipes = data.Meads as MeadRecipe[];
-          this.meadSubject.next(meadRecipes); // update internal state
-          subscriber.next(meadRecipes); // emit to subscriber
-          subscriber.complete(); // complete Observable
+          const list = data.Meads as MeadRecipe[];
+          this.meadSubject.next(list);
+          return list;
         })
-        .catch((error) => {
-          console.error('Error fetching Mead Recipes:', error);
-          subscriber.error(error); // emit error
-        });
-    });
+    );
+  }
+
+  getCurrentMeadRecipes(): MeadRecipe[] {
+    return this.meadSubject.getValue();
   }
 }
+
 const httpService = new HttpService();
-export default httpService; //export a Singleton pattern
+export default httpService;
