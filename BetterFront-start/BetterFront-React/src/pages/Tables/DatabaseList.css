@@ -1,0 +1,18 @@
+.debut-button {
+  padding: 8px 16px;
+  background-color: green;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.debut-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.debut-button:active {
+  background-color: #003f7f; /* Even darker blue when clicked */
+}
