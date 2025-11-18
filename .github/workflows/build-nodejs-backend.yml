@@ -1,0 +1,25 @@
+name: build-nodejs-backend
+
+on:
+  workflow_run:
+    workflows: ["build-output-directory"]
+    types:
+      - completed
+
+jobs:
+  build-backend:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          
+      - name: npm install
+        run: |
+          cd BetterFront-start/BetterFront-NodeJS
+          npm install
