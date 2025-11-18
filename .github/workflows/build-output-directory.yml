@@ -20,17 +20,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          
-      - name: Show directory tree
-        run: ls -R .    
-
+             
       - name: npm install for React frontend
         run: |
           cd BetterFront-start/BetterFront-React
           npm install
           
       - name: npm build output directory
-        run: npm run build
+        run: |
+          cd BetterFront-start/BetterFront-React
+          npm run build
 
       - name: Check if output directory was created
         run: |
