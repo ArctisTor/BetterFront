@@ -9,7 +9,7 @@ permissions:
   packages: write
 
 jobs:
-  build:
+  build-frontend:
     runs-on: ubuntu-latest
 
     steps:        
@@ -28,3 +28,21 @@ jobs:
         run: |
           cd BetterFront-start/BetterFront-React
           npm install
+          
+      - name: npm build output directory
+        run: npm run build
+
+      - name: Check if output directory was created
+        run: |
+          DIR="../BetterFront-NodeJS/frontend"
+          if [ ! -d "$DIR" ]; then
+            echo "❌ Directory $DIR does not exist!"
+            exit 1
+          fi
+          if [ -z "$(ls -A $DIR)" ]; then
+            echo "❌ Directory $DIR is empty!"
+            exit 1
+          fi
+          echo "✅ Directory $DIR exists and is not empty."
+
+      
