@@ -14,6 +14,7 @@ import meadRecipeRouter from './routers/mead-recipe-router.js';
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const __configPath = path.join(__dirname, './config', 'appconfig.json');
+const frontendDir = path.join(__dirname, 'frontend');
 
 let config: AppConfig;
 try {
@@ -45,6 +46,12 @@ const meadRecipeMount = express.Router();
 app.use('/vtuber', vtuberMount);
 app.use('/org', orgMount);
 app.use('/meadRecipes', meadRecipeMount);
+
+//Build the frontend path
+app.use(express.static(frontendDir))
+app.get('*', (req, res) => {
+  res.send(path.join(frontendDir, 'index.html'));
+})
 
 // Run heartbeat checks
 const checker = new HeartBeatChecker();

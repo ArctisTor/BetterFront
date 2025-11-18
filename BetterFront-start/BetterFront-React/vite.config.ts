@@ -23,4 +23,7 @@ export default defineConfig({
   optimizeDeps: {
     //exclude: ['js-big-decimal']
   },
+  build: {
+    outDir: '../BetterFront-NodeJS/frontend'
+  }
 });
