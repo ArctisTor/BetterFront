@@ -3,7 +3,7 @@ name: build-output-directory
 on:
   push:
     branches: [master]
-    
+
 permissions:
   contents: read
   packages: write
@@ -23,7 +23,5 @@ jobs:
 
       - name: npm install for React frontend
         run: |
-          cd /BetterFront-start/BetterFront-React
+          cd BetterFront-start/BetterFront-React
           npm install
-        
-          
