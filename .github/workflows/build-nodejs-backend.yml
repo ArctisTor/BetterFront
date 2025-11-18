@@ -1,0 +1,5 @@
+name: build-nodejs-backend
+
+on:
+  push:
+    branches: [main]
