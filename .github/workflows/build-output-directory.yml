@@ -24,7 +24,7 @@ jobs:
       - name: Show directory tree
         run: ls -R .    
 
-      # - name: npm install for React frontend
-      #   run: |
-      #     cd BetterFront-start/BetterFront-React
-      #     npm install
+      - name: npm install for React frontend
+        run: |
+          cd BetterFront-start/BetterFront-React
+          npm install
