@@ -12,10 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Show directory tree
-        run: ls -R .
-        
+    steps:        
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -23,8 +20,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+          
+      - name: Show directory tree
+        run: ls -R .    
 
-      - name: npm install for React frontend
-        run: |
-          cd BetterFront-start/BetterFront-React
-          npm install
+      # - name: npm install for React frontend
+      #   run: |
+      #     cd BetterFront-start/BetterFront-React
+      #     npm install
