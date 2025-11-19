@@ -43,5 +43,22 @@ jobs:
             exit 1
           fi
           echo "✅ Directory $DIR exists and is not empty."
+  nodejs-npm-intall:
+    runs-on: ubuntu-latest
+    needs: build-frontend
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: npm install for NodeJS backend
+        run: |
+          cd BetterFront-start/BetterFront-NodeJS
+          npm install
 
       
