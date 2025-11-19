@@ -93,8 +93,14 @@ jobs:
           name: nodejs-web-server
           path: BetterFront-start/BetterFront-NodeJS/
 
+      - name: Build Docker image
+        run: |
+          cd BetterFront
+          docker build -t betterfront:latest .   
+
       - name: Save Docker image as tar
         run: |
+          cd BetterFront
           docker save betterfront:latest -o betterfront-latest.tar
 
       - name: Upload Docker image artifact
