@@ -18,6 +18,11 @@
         "protocol": "http",
         "url": "localhost",
         "port": "8080"
+      },
+      {
+        "protocol": "http",
+        "url": "betterjava",
+        "port": "9000"
       }
     ],
     "vtuberController": {
