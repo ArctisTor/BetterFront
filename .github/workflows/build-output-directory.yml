@@ -43,6 +43,13 @@ jobs:
             exit 1
           fi
           echo "✅ Directory $DIR exists and is not empty."
+
+      - name: Upload frontend build
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-build
+          path: BetterFront-start/BetterFront-NodeJS/frontend
+          
   nodejs-npm-intall:
     runs-on: ubuntu-latest
     needs: build-frontend
@@ -55,10 +62,22 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-
+          
+      - name: Download frontend build
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-build
+          path: BetterFront-start/BetterFront-NodeJS/frontend
+    
       - name: npm install for NodeJS backend
         run: |
           cd BetterFront-start/BetterFront-NodeJS
           npm install
+
+      - name: Upload NodeJS with frontend
+        uses: actions/upload-artifact@v4
+        with:
+          name: nodejs-web-server
+          path: BetterFront-start/BetterFront-NodeJS/    
 
       
