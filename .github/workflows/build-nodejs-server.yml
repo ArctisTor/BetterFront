@@ -1,4 +1,4 @@
-name: build-output-directory
+name: build-nodejs-server
 
 on:
   push:
