@@ -112,12 +112,17 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
-      -  name: Trigger betterjava cache
-         uses: peter-evans/repository-dispatch@v3
-         with:
-          token: ${{ secrets.GITHUB_TOKEN }}  # Uses default—no new secret needed
-          repository: ArctisTor/BetterJava    # Your exact betterjava repo name
+      - name: Trigger betterjava cache
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.DISPATCH_PAT }}  
+          repository: ArctisTor/BetterJava 
           event-type: betterfront-built
-          client-payload: '{"ref": "$$ {{ github.ref }}", "run_id": " $${{ github.run_id }}"}'  # Optional: pass data like run ID     
+          client-payload: >  # Optional: Passes useful data to betterjava if needed
+            {
+              "ref": "${{ github.ref }}",
+              "sha": "${{ github.sha }}",
+              "run_id": "${{ github.run_id }}"
+            }    
 
       
