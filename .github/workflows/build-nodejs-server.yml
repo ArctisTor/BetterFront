@@ -106,5 +106,7 @@ jobs:
         with:
           name: betterfront-docker-image
           path: betterfront-latest.tar
+          if-no-files-found: error
+          retention-days: 7
 
       
