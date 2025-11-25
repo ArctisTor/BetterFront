@@ -48,7 +48,7 @@ const DebutVTuber: React.FC<ModalModel> = ({ isOpen, closeModal }) => {
           <NavBar title={"Debut VTuber"} />
           <form onSubmit={debutVTuber}>
             <div className="form-row">
-              <label htmlFor="date">Debut Date</label>
+              <label htmlFor="debutDate">Debut Date</label>
               <input
                 id="debutDate"
                 type="date"
@@ -58,7 +58,7 @@ const DebutVTuber: React.FC<ModalModel> = ({ isOpen, closeModal }) => {
               />
             </div>
             <div className="form-row">
-              <label htmlFor="date">Birthday</label>
+              <label htmlFor="birthday">Birthday</label>
               <input
                 id="birthday"
                 type="date"

@@ -3,10 +3,15 @@ import { MeadRecipe } from '../../../models/mead_models/MeadRecipe';
 import MeadRecipeEntity from './MeadRecipeEntity';
 import SearchBar from '../../../component/SearchBar/SearchBar';
 import httpService from '../../../services/httpService'; // singleton instance
+import MeadRecipeModal from '../../../component/modal/meadRecipeModal/MeadRecipeModal';
 
 const MeadRecipeList = () => {
   const [allMeads, setAllMeads] = useState<MeadRecipe[]>([]);
   const [dropdownOptions, setDropdownOptions] = useState<string[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   //This one is about side effects with external systems (subscribing to Observables, cleaning them up).
   useEffect(() => {
@@ -29,6 +34,10 @@ const MeadRecipeList = () => {
   return (
     <>
       <div className="option-bar">
+        <button className="" onClick={openModal}>
+          + Add Recipe
+        </button>
+        <MeadRecipeModal isOpen={isModalOpen} closeModal={closeModal} />
         <SearchBar dropdownOption={dropdownOptions} />
       </div>
       <section className="bg-blue-50 px-4 py-10">

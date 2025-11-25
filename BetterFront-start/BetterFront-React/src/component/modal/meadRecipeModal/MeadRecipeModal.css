@@ -1,0 +1,36 @@
+/* MeadRecipeModal.css — THIS WILL NEVER BE IGNORED */
+.ingredient-list-container {
+    display: block !important;
+    margin: 16px 0 !important;
+}
+
+/* FORCE LABEL TO TAKE FULL WIDTH */
+.label-title {
+    width: 100% !important;
+    display: block !important;
+}
+
+.label-title label {
+    display: block !important;
+    width: 100% !important;
+    font-weight: 600;
+    font-size: 2rem;
+    margin-bottom: 12px !important;
+}
+
+.center-add-button {
+    display: block !important;
+    text-align: center !important;
+    margin-top: 2rem !important;
+}
+
+.ingredient-list-container .add-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.ingredient-list-container .add-btn:hover {
+    background: #1565c0 !important;
+    transform: scale(1.05) !important;
+}
