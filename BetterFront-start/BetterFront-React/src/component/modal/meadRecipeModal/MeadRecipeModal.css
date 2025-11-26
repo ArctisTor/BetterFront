@@ -1,36 +1,68 @@
-/* MeadRecipeModal.css — THIS WILL NEVER BE IGNORED */
 .ingredient-list-container {
-    display: block !important;
-    margin: 16px 0 !important;
+    display: block;
+    margin: 16px 0;
 }
 
-/* FORCE LABEL TO TAKE FULL WIDTH */
 .label-title {
-    width: 100% !important;
-    display: block !important;
+    width: 100%;
+    display: block;
 }
 
 .label-title label {
-    display: block !important;
-    width: 100% !important;
+    display: block;
+    width: 100%;
     font-weight: 600;
     font-size: 2rem;
-    margin-bottom: 12px !important;
+    margin-bottom: 12px
 }
 
-.center-add-button {
-    display: block !important;
-    text-align: center !important;
-    margin-top: 2rem !important;
+.center-add-button-div {
+    display: block;
+    text-align: center;
+    margin-top: 2rem;
 }
 
-.ingredient-list-container .add-btn {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+.add-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.ingredient-list-container .add-btn:hover {
-    background: #1565c0 !important;
-    transform: scale(1.05) !important;
+.add-btn:hover {
+    background: #1565c0;
+    transform: scale(1.05);
+}
+
+.ingredient-section {
+    border: 1px solid black;
+}
+
+.sectionTitle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.section-title-input {
+    flex: 1;
+}
+
+.ingredient-items {
+    display: flex;
+    flex-direction: column;
+}
+
+.ingredient-label {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.ingredient-item-list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }

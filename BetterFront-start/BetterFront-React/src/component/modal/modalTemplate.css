@@ -107,6 +107,16 @@ button:disabled {
     width: 6rem;
 }
 
+.delete-btn {
+    background-color: transparent;
+    color: black;
+}
+
+.delete-btn:hover {
+    background-color: transparent;
+    color: #e53935;
+}
+
 .cancel-btn:hover {
     background-color: #e53935;
     /* Darker red on hover */

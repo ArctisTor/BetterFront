@@ -1,7 +1,9 @@
 import { useState } from "react";
 import NavBar from "../../NavBar";
 
-import "./MeadRecipeModal.css";   // ← THIS IS THE ONLY LINE YOU NEED
+import "./MeadRecipeModal.css";
+import DeleteIcon from "@mui/icons-material/Delete";
+
 
 
 interface ModalModel {
@@ -9,11 +11,22 @@ interface ModalModel {
     closeModal: () => void;
 }
 
+interface IngredientSection {
+    id: number;
+    title: string;
+    items: IngredientItem[];
+}
+
+interface IngredientItem {
+    id: number;
+    description: string
+}
+
 const MeadRecipeModal: React.FC<ModalModel> = ({ isOpen, closeModal }) => {
 
     const [meadName, setMeadName] = useState("");
     const [meadABV, setMeadABV] = useState(0.0);
-    const [sections, setSections] = useState<string[]>([]);
+    const [sections, setSections] = useState<IngredientSection[]>([]);
 
     if (!isOpen) return null;
 
@@ -33,7 +46,20 @@ const MeadRecipeModal: React.FC<ModalModel> = ({ isOpen, closeModal }) => {
     }
 
     const addSection = () => {
-        setSections([...sections, ""]);
+        setSections(prev => [
+            ...prev,
+            { id: Date.now() + Math.random(), title: "", items: [] as IngredientItem[] }
+        ]);
+    };
+
+    const deleteSection = (id: number) => {
+        setSections(prev => prev.filter(section => section.id !== id));
+    };
+
+    const updateSectionTitle = (id: number, newTitle: string) => {
+        setSections(prev =>
+            prev.map(section => (section.id === id ? { ...section, title: newTitle } : section))
+        );
     };
 
     return (
@@ -69,22 +95,40 @@ const MeadRecipeModal: React.FC<ModalModel> = ({ isOpen, closeModal }) => {
                                 <label>Ingredient List </label>
                             </div>
 
-                            {/* Dynamic sections — NO onChange, NO warnings, just works */}
-                            {sections.map((_, index) => (
-                                <div key={index} className="ingredient-section mb-4">
-                                    <label className="form-label fw-semibold d-block mb-2">
-                                        Section Title
-                                    </label>
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        placeholder="e.g. Primary Fermentation, Bottling, Aging..."
-                                        defaultValue=""
-                                    />
+                            {sections.map((section) => (
+                                <div key={section.id} className="ingredient-section mb-4">
+                                    <div className="sectionTitle">
+                                        <button className="delete-btn" onClick={() => deleteSection(section.id)}>
+                                            <DeleteIcon />
+                                        </button>
+                                        <label className="form-label fw-semibold d-block mb-2">
+                                            Section Title
+                                        </label>
+                                        <input
+                                            type="text"
+                                            className="section-title-input form-control"
+                                            placeholder="e.g. Primary Fermentation, Bottling, Aging..."
+                                            onChange={(e) => updateSectionTitle(section.id, e.target.value)}
+                                            value={section.title}
+                                        />
+                                    </div>
+                                    <div className="ingredient-items">
+                                        <div className="ingredient-label">
+                                            <label className="form-label fw-semibold d-block mb-2">
+                                                Items
+                                            </label>
+                                        </div>
+
+                                        <div className="ingredient-item-list">
+                                            <button type="button" className="add-btn">
+                                                +
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             ))}
 
-                            <div className="center-add-button">
+                            <div className="center-add-button-div">
                                 <button type="button" className="add-btn" onClick={addSection}>
                                     +
                                 </button>
